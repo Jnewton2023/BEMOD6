@@ -16,7 +16,7 @@
 
     <?php
     // Include the database connection file
-    include 'db_connection.php';
+    include 'testDatabase';
 
     // Handle form submissions
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -24,8 +24,12 @@
             // Handle adding a new booking
             $selectedPackage = $_POST['package'];
             $selectedVehicle = $_POST['vehicle'];
+    ?>
+     <!-- Add the image -->
+     <img src="https://detailtime.net/wp-content/uploads/2022/01/what-is-auto-detailing.webp" alt="Auto Detailing">
 
-            // Save the booking details to the database
+     <?php
+              // Save the booking details to the database
             $query = "INSERT INTO bookings (packages, vehicles) VALUES ('$selectedPackage', '$selectedVehicle')";
             $result = mysqli_query($connection, $query);
 
