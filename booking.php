@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Handle the form submission from index.php
+    // Handle the form submission from index.html
     $selectedPackage = $_POST['package'];
     $selectedVehicle = $_POST['vehicle'];
 
@@ -22,12 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     mysqli_close($databaseConnection);
 
-    // Redirect back to index.php with a success message
-    header("Location: index.php?success=true");
+    // Redirect back to index.html with a success message
+    header("Location: index.html?success=true");
+    exit();
+} else {
+    // Redirect back to index.html if accessed directly without form submission
+    header("Location: index.html");
     exit();
 }
-else {
-    // Redirect back to index.php if accessed directly without form submission
-    header("Location: index.php");
-    exit();
-}
+?>
