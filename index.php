@@ -3,15 +3,41 @@ include 'functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle the form submission from index.php
-    $selectedPackage = $_POST['package'];
-    $selectedVehicle = $_POST['vehicle'];
+    if (isset($_POST['add'])) {
+        // Add a new booking
+        $selectedPackage = $_POST['package'];
+        $selectedVehicle = $_POST['vehicle'];
 
-    addBooking($selectedPackage, $selectedVehicle);
+        addBooking($selectedPackage, $selectedVehicle);
 
-    // Redirect back to index.php with a success message
-    header("Location: index.php?success=true");
-    exit();
+        // Redirect back to index.php with a success message
+        header("Location: index.php?success=true");
+        exit();
+    } elseif (isset($_POST['edit'])) {
+        // Edit an existing booking
+        $bookingId = $_POST['booking_id'];
+        $selectedPackage = $_POST['package'];
+        $selectedVehicle = $_POST['vehicle'];
+
+        updateBooking($bookingId, $selectedPackage, $selectedVehicle);
+
+        // Redirect back to index.php with a success message
+        header("Location: index.php?success=true");
+        exit();
+    } elseif (isset($_POST['delete'])) {
+        // Delete an existing booking
+        $bookingId = $_POST['booking_id'];
+
+        deleteBooking($bookingId);
+
+        // Redirect back to index.php with a success message
+        header("Location: index.php?success=true");
+        exit();
+    }
 }
+
+// Retrieve all bookings from the database
+$bookings = getAllBookings();
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +57,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <img src="https://detailtime.net/wp-content/uploads/2022/01/what-is-auto-detailing.webp" alt="Auto Detailing">
     <p>Come schedule an appointment and drop off your vehicle to take a break from your jam-packed personal and professional days!</p>
     <h2><u>Bookings</u></h2>
+
+    <?php foreach ($bookings as $booking) : ?>
+        <p>Booking ID: <?php echo $booking['id']; ?></p>
+        <p>Package: <?php echo $booking['packages']; ?></p>
+        <p>Vehicle: <?php echo $booking['vehicles']; ?></p>
+
+        <form method="post" action="index.php">
+            <input type="hidden" name="booking_id" value="<?php echo $booking['id']; ?>">
+            <label for="package">Package:</label>
+            <input type="text" name="package" value="<?php echo $booking['packages']; ?>"><br>
+            <label for="vehicle">Vehicle:</label>
+            <input type="text" name="vehicle" value="<?php echo $booking['vehicles']; ?>"><br>
+            <button type="submit" name="edit">Save</button>
+            <button type="submit" name="delete">Delete</button>
+        </form>
+
+        <hr>
+    <?php endforeach; ?>
 
     <form method="post" action="index.php">
         <label for="package">Select a Package:</label>
